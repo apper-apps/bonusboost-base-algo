@@ -11,9 +11,10 @@ import LandingPage from "@/components/pages/LandingPage";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-background">
+<div className="min-h-screen bg-background">
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="create" element={<CreateBonus />} />
           <Route path="pages" element={<MyPages />} />
@@ -21,7 +22,6 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="/bonus/:id" element={<BonusPageView />} />
-        <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </div>
   );
