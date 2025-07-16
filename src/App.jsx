@@ -1,22 +1,23 @@
-import { createContext, useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser, clearUser } from './store/userSlice';
-import { ToastContainer } from 'react-toastify';
-import Layout from '@/components/organisms/Layout';
-import Dashboard from '@/components/pages/Dashboard';
-import CreateBonus from '@/components/pages/CreateBonus';
-import MyPages from '@/components/pages/MyPages';
-import Analytics from '@/components/pages/Analytics';
-import Settings from '@/components/pages/Settings';
-import BonusPageView from '@/components/pages/BonusPageView';
-import LandingPage from '@/components/pages/LandingPage';
-import Login from '@/components/pages/Login';
-import Signup from '@/components/pages/Signup';
-import Callback from '@/components/pages/Callback';
-import ErrorPage from '@/components/pages/ErrorPage';
-import ResetPassword from '@/components/pages/ResetPassword';
-import PromptPassword from '@/components/pages/PromptPassword';
+import React, { createContext, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import SalesPage from "@/components/pages/SalesPage";
+import Layout from "@/components/organisms/Layout";
+import Analytics from "@/components/pages/Analytics";
+import BonusPageView from "@/components/pages/BonusPageView";
+import Login from "@/components/pages/Login";
+import Signup from "@/components/pages/Signup";
+import MyPages from "@/components/pages/MyPages";
+import LandingPage from "@/components/pages/LandingPage";
+import Callback from "@/components/pages/Callback";
+import PromptPassword from "@/components/pages/PromptPassword";
+import CreateBonus from "@/components/pages/CreateBonus";
+import Dashboard from "@/components/pages/Dashboard";
+import ErrorPage from "@/components/pages/ErrorPage";
+import ResetPassword from "@/components/pages/ResetPassword";
+import Settings from "@/components/pages/Settings";
+import { clearUser, setUser } from "@/store/userSlice";
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -152,10 +153,11 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="create" element={<CreateBonus />} />
             <Route path="pages" element={<MyPages />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="settings" element={<Settings />} />
+<Route path="settings" element={<Settings />} />
           </Route>
-          <Route path="/bonus/:id" element={<BonusPageView />} />
+<Route path="/bonus/:id" element={<BonusPageView />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
         <ToastContainer
           position="top-right"
