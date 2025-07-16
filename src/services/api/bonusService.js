@@ -1,4 +1,4 @@
-import mockBonuses from "@/services/mockData/bonuses.json";
+import { toast } from 'react-toastify';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -70,41 +70,237 @@ export const bonusService = {
   },
 
   async getAll() {
-    await delay(300);
-    return mockBonuses;
+    try {
+      const { ApperClient } = window.ApperSDK;
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "title" } },
+          { field: { Name: "description" } },
+          { field: { Name: "type" } },
+          { field: { Name: "content" } },
+          { field: { Name: "value" } },
+          { field: { Name: "created_at" } },
+          { field: { Name: "product_id" } }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords('bonus', params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return [];
+      }
+
+      return response.data || [];
+    } catch (error) {
+      console.error("Error fetching bonuses:", error);
+      toast.error("Failed to fetch bonuses");
+      return [];
+    }
   },
 
   async getById(id) {
-    await delay(300);
-    return mockBonuses.find(bonus => bonus.Id === parseInt(id));
+    try {
+      const { ApperClient } = window.ApperSDK;
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "title" } },
+          { field: { Name: "description" } },
+          { field: { Name: "type" } },
+          { field: { Name: "content" } },
+          { field: { Name: "value" } },
+          { field: { Name: "created_at" } },
+          { field: { Name: "product_id" } }
+        ]
+      };
+
+      const response = await apperClient.getRecordById('bonus', parseInt(id), params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching bonus with ID ${id}:`, error);
+      toast.error("Failed to fetch bonus");
+      return null;
+    }
   },
 
   async create(bonus) {
-    await delay(500);
-    const newBonus = {
-      ...bonus,
-      Id: Math.max(...mockBonuses.map(b => b.Id)) + 1,
-      createdAt: new Date().toISOString()
-    };
-    mockBonuses.push(newBonus);
-    return newBonus;
+    try {
+      const { ApperClient } = window.ApperSDK;
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        records: [{
+          Name: bonus.title || bonus.Name,
+          Tags: bonus.tags || bonus.Tags || "",
+          Owner: bonus.owner || bonus.Owner,
+          title: bonus.title,
+          description: bonus.description,
+          type: bonus.type,
+          content: typeof bonus.content === 'object' ? JSON.stringify(bonus.content) : bonus.content || "",
+          value: bonus.value,
+          created_at: bonus.createdAt || new Date().toISOString(),
+          product_id: bonus.productId || bonus.product_id
+        }]
+      };
+
+      const response = await apperClient.createRecord('bonus', params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create ${failedRecords.length} records:${JSON.stringify(failedRecords)}`);
+          failedRecords.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulRecords.length > 0) {
+          toast.success("Bonus created successfully");
+          return successfulRecords[0].data;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error creating bonus:", error);
+      toast.error("Failed to create bonus");
+      return null;
+    }
   },
 
   async update(id, updates) {
-    await delay(500);
-    const index = mockBonuses.findIndex(bonus => bonus.Id === parseInt(id));
-    if (index === -1) throw new Error("Bonus not found");
-    
-    mockBonuses[index] = { ...mockBonuses[index], ...updates };
-    return mockBonuses[index];
+    try {
+      const { ApperClient } = window.ApperSDK;
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          ...(updates.title && { Name: updates.title, title: updates.title }),
+          ...(updates.tags && { Tags: updates.tags }),
+          ...(updates.owner && { Owner: updates.owner }),
+          ...(updates.description && { description: updates.description }),
+          ...(updates.type && { type: updates.type }),
+          ...(updates.content && { content: typeof updates.content === 'object' ? JSON.stringify(updates.content) : updates.content }),
+          ...(updates.value && { value: updates.value }),
+          ...(updates.createdAt && { created_at: updates.createdAt }),
+          ...(updates.productId && { product_id: updates.productId })
+        }]
+      };
+
+      const response = await apperClient.updateRecord('bonus', params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return null;
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          failedUpdates.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulUpdates.length > 0) {
+          toast.success("Bonus updated successfully");
+          return successfulUpdates[0].data;
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error updating bonus:", error);
+      toast.error("Failed to update bonus");
+      return null;
+    }
   },
 
   async delete(id) {
-    await delay(300);
-    const index = mockBonuses.findIndex(bonus => bonus.Id === parseInt(id));
-    if (index === -1) throw new Error("Bonus not found");
-    
-    mockBonuses.splice(index, 1);
-    return true;
+    try {
+      const { ApperClient } = window.ApperSDK;
+      const apperClient = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
+
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+
+      const response = await apperClient.deleteRecord('bonus', params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        toast.error(response.message);
+        return false;
+      }
+
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete ${failedDeletions.length} records:${JSON.stringify(failedDeletions)}`);
+          failedDeletions.forEach(record => {
+            if (record.message) toast.error(record.message);
+          });
+        }
+        
+        if (successfulDeletions.length > 0) {
+          toast.success("Bonus deleted successfully");
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Error deleting bonus:", error);
+      toast.error("Failed to delete bonus");
+      return false;
+    }
   }
 };

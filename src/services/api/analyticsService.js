@@ -58,7 +58,7 @@ export const analyticsService = {
       .sort((a, b) => (b.views || 0) - (a.views || 0))
       .slice(0, 5)
       .map(page => ({
-        id: page.id,
+        id: page.Id || page.id,
         title: page.title,
         views: page.views || 0,
         clicks: page.clicks || 0,
