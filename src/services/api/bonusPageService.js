@@ -11,7 +11,7 @@ export const bonusPageService = {
         apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
       });
 
-      const params = {
+const params = {
         records: [{
           Name: pageData.title || pageData.Name,
           Tags: pageData.tags || pageData.Tags || "",
@@ -27,7 +27,13 @@ export const bonusPageService = {
           conversions: pageData.conversions || 0,
           design: typeof pageData.design === 'object' ? JSON.stringify(pageData.design) : pageData.design || "",
           created_at: pageData.createdAt || new Date().toISOString(),
-          bonus_id: pageData.bonusId || pageData.bonus_id
+          bonus_id: pageData.bonusId || pageData.bonus_id,
+          headline: pageData.headline || "",
+          subheadline: pageData.subheadline || "",
+          youtubeEmbed: pageData.youtubeEmbed || "",
+          bonusExplanations: pageData.bonusExplanations || "",
+          ctaLink: pageData.ctaLink || pageData.affiliateLink || pageData.affiliate_link,
+          ctaDesign: pageData.ctaDesign || ""
         }]
       };
 
@@ -72,7 +78,7 @@ export const bonusPageService = {
         apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
       });
 
-      const params = {
+const params = {
         fields: [
           { field: { Name: "Name" } },
           { field: { Name: "Tags" } },
@@ -88,7 +94,13 @@ export const bonusPageService = {
           { field: { Name: "conversions" } },
           { field: { Name: "design" } },
           { field: { Name: "created_at" } },
-          { field: { Name: "bonus_id" } }
+          { field: { Name: "bonus_id" } },
+          { field: { Name: "headline" } },
+          { field: { Name: "subheadline" } },
+          { field: { Name: "youtubeEmbed" } },
+          { field: { Name: "bonusExplanations" } },
+          { field: { Name: "ctaLink" } },
+          { field: { Name: "ctaDesign" } }
         ]
       };
 
@@ -116,7 +128,7 @@ export const bonusPageService = {
         apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
       });
 
-      const params = {
+const params = {
         fields: [
           { field: { Name: "Name" } },
           { field: { Name: "Tags" } },
@@ -132,7 +144,13 @@ export const bonusPageService = {
           { field: { Name: "conversions" } },
           { field: { Name: "design" } },
           { field: { Name: "created_at" } },
-          { field: { Name: "bonus_id" } }
+          { field: { Name: "bonus_id" } },
+          { field: { Name: "headline" } },
+          { field: { Name: "subheadline" } },
+          { field: { Name: "youtubeEmbed" } },
+          { field: { Name: "bonusExplanations" } },
+          { field: { Name: "ctaLink" } },
+          { field: { Name: "ctaDesign" } }
         ]
       };
 
@@ -160,7 +178,7 @@ export const bonusPageService = {
         apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
       });
 
-      const params = {
+const params = {
         records: [{
           Id: parseInt(id),
           ...(updates.title && { Name: updates.title, title: updates.title }),
@@ -176,7 +194,13 @@ export const bonusPageService = {
           ...(updates.conversions !== undefined && { conversions: updates.conversions }),
           ...(updates.design && { design: typeof updates.design === 'object' ? JSON.stringify(updates.design) : updates.design }),
           ...(updates.createdAt && { created_at: updates.createdAt }),
-          ...(updates.bonusId && { bonus_id: updates.bonusId })
+          ...(updates.bonusId && { bonus_id: updates.bonusId }),
+          ...(updates.headline && { headline: updates.headline }),
+          ...(updates.subheadline && { subheadline: updates.subheadline }),
+          ...(updates.youtubeEmbed && { youtubeEmbed: updates.youtubeEmbed }),
+          ...(updates.bonusExplanations && { bonusExplanations: updates.bonusExplanations }),
+          ...(updates.ctaLink && { ctaLink: updates.ctaLink }),
+          ...(updates.ctaDesign && { ctaDesign: updates.ctaDesign })
         }]
       };
 

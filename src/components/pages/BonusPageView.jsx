@@ -36,14 +36,122 @@ const BonusPageView = () => {
     }
   };
 
-  const handleClaimBonus = async () => {
+const handleClaimBonus = async () => {
     try {
       await bonusPageService.trackClick(id);
-      toast.success("Redirecting to product page...");
-      // Redirect to affiliate link
-      window.location.href = page.affiliateLink;
+      toast.success("Redirecting to offer...");
+      // Use ctaLink if available, otherwise fallback to affiliate_link
+      const redirectUrl = page.ctaLink || page.affiliate_link;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        toast.error("No redirect URL available");
+      }
     } catch (error) {
       toast.error("Failed to process request");
+    }
+  };
+
+  const renderYouTubeEmbed = () => {
+    if (!page.youtubeEmbed) return null;
+    
+    try {
+      // Extract video ID from various YouTube URL formats
+      const videoId = extractYouTubeVideoId(page.youtubeEmbed);
+      if (!videoId) {
+        // If it's already an embed code, use it directly
+        return (
+          <div 
+            className="w-full aspect-video rounded-lg overflow-hidden"
+            dangerouslySetInnerHTML={{ __html: page.youtubeEmbed }}
+          />
+        );
+      }
+      
+      return (
+        <div className="w-full aspect-video rounded-lg overflow-hidden">
+          <iframe
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      );
+    } catch (error) {
+      console.error("Error rendering YouTube embed:", error);
+      return (
+        <div className="w-full aspect-video rounded-lg bg-gray-800 flex items-center justify-center">
+          <p className="text-gray-400">Unable to load video</p>
+        </div>
+      );
+    }
+  };
+
+  const extractYouTubeVideoId = (url) => {
+    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
+
+  const renderBonusExplanations = () => {
+    if (!page.bonusExplanations) return null;
+    
+    try {
+      // Try to parse as JSON first
+      let explanations;
+      if (typeof page.bonusExplanations === 'string') {
+        try {
+          explanations = JSON.parse(page.bonusExplanations);
+        } catch {
+          // If not JSON, treat as plain text and split by lines
+          explanations = page.bonusExplanations.split('\n').filter(line => line.trim());
+        }
+      } else {
+        explanations = page.bonusExplanations;
+      }
+
+      if (!Array.isArray(explanations)) {
+        explanations = [explanations];
+      }
+
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {explanations.map((explanation, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                  <ApperIcon name="Gift" className="h-4 w-4 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-white mb-2">
+                    Bonus #{index + 1}
+                  </h4>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {typeof explanation === 'string' ? explanation : explanation.description || 'Bonus description'}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      );
+    } catch (error) {
+      console.error("Error rendering bonus explanations:", error);
+      return (
+        <div className="text-center py-8">
+          <p className="text-gray-400">Unable to load bonus details</p>
+        </div>
+      );
     }
   };
 
@@ -75,18 +183,19 @@ const BonusPageView = () => {
     );
   }
 
-  return (
+return (
     <div 
       className="min-h-screen py-12 px-4"
-      style={{ backgroundColor: page.design.backgroundColor }}
+      style={{ backgroundColor: page.design?.backgroundColor || '#111827' }}
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-8"
+          className="space-y-12"
         >
-          <div className="space-y-4">
+          {/* Header Section */}
+          <div className="text-center space-y-6">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -100,96 +209,149 @@ const BonusPageView = () => {
               🎁 Exclusive Bonus
             </Badge>
             
+            {/* Headline */}
             <h1 
-              className="text-4xl md:text-5xl font-bold mb-6"
-              style={{ color: page.design.primaryColor }}
+              className="text-4xl md:text-6xl font-bold mb-4 gradient-text"
+              style={{ color: page.design?.primaryColor || '#6366F1' }}
             >
-              {page.title}
+              {page.headline || page.title || 'Exclusive Bonus Offer'}
             </h1>
             
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              {page.description}
+            {/* Subheadline */}
+            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              {page.subheadline || page.description || 'Get this amazing bonus when you purchase through our exclusive link'}
             </p>
           </div>
 
-          <Card className="max-w-2xl mx-auto bg-white/5 backdrop-blur-sm border-white/10">
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <ApperIcon name="Package" className="h-5 w-5 text-primary" />
+          {/* Product Information Section */}
+          <div className="max-w-4xl mx-auto">
+<Card className="bg-white/5 backdrop-blur-sm border-white/10">
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    <ApperIcon name="Package" className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-white">
+                      Main Product: {page.productName || "Featured Product"}
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      Get this exclusive bonus when you purchase through our link
+                    </p>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h3 className="font-semibold text-white">
-                    Main Product: {page.productName || "Featured Product"}
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Get this exclusive bonus when you purchase through our link
+
+                <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center gap-2 mb-3">
+                    <ApperIcon name="Clock" className="h-4 w-4 text-warning" />
+                    <span className="text-sm font-medium text-warning">
+                      Limited Time Offer
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-300">
+                    This bonus is only available for a limited time. 
+                    Purchase the main product now to unlock this exclusive bonus.
                   </p>
                 </div>
-              </div>
 
-              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <div className="flex items-center gap-2 mb-3">
-                  <ApperIcon name="Clock" className="h-4 w-4 text-warning" />
-                  <span className="text-sm font-medium text-warning">
-                    Limited Time Offer
-                  </span>
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-white">What You'll Get:</h4>
+                  <ul className="text-left space-y-2">
+                    <li className="flex items-start gap-2">
+                      <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
+                      <span className="text-sm text-gray-300">
+                        Complete bonus package worth $297
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
+                      <span className="text-sm text-gray-300">
+                        Step-by-step implementation guide
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
+                      <span className="text-sm text-gray-300">
+                        Exclusive templates and resources
+                      </span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
+                      <span className="text-sm text-gray-300">
+                        Lifetime access and updates
+                      </span>
+                    </li>
+                  </ul>
                 </div>
-                <p className="text-sm text-gray-300">
-                  This bonus is only available for a limited time. 
-                  Purchase the main product now to unlock this exclusive bonus.
-                </p>
               </div>
+            </Card>
+          </div>
 
-              <div className="space-y-4">
-                <h4 className="font-semibold text-white">What You'll Get:</h4>
-                <ul className="text-left space-y-2">
-                  <li className="flex items-start gap-2">
-                    <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
-                    <span className="text-sm text-gray-300">
-                      Complete bonus package worth $297
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
-                    <span className="text-sm text-gray-300">
-                      Step-by-step implementation guide
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
-                    <span className="text-sm text-gray-300">
-                      Exclusive templates and resources
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <ApperIcon name="Check" className="h-4 w-4 text-accent mt-0.5" />
-                    <span className="text-sm text-gray-300">
-                      Lifetime access and updates
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card>
+          {/* YouTube Embed Section */}
+          {page.youtubeEmbed && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-4xl mx-auto"
+            >
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <ApperIcon name="Play" className="h-5 w-5 text-primary" />
+                    <h3 className="font-semibold text-white">Watch the Demo</h3>
+                  </div>
+                  {renderYouTubeEmbed()}
+                </div>
+              </Card>
+            </motion.div>
+          )}
 
+          {/* Bonus Explanations Grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="space-y-4"
+            className="max-w-6xl mx-auto"
           >
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-white mb-4">
+                What's Included in Your Bonus Package
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Each bonus is carefully crafted to maximize your success and provide immediate value
+              </p>
+            </div>
+            {renderBonusExplanations()}
+          </motion.div>
+
+          {/* Call to Action Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="text-center space-y-6"
+          >
+            <div className="max-w-2xl mx-auto">
+              <h3 className="text-2xl font-bold text-white mb-4">
+                Ready to Get Started?
+              </h3>
+              <p className="text-gray-400 mb-6">
+                Click the button below to claim your exclusive bonus package
+              </p>
+            </div>
+            
             <Button
               onClick={handleClaimBonus}
               size="xl"
-              className="px-12 py-4 text-lg font-semibold shadow-glow-accent hover:shadow-glow-accent"
+              className="px-12 py-4 text-lg font-semibold shadow-glow-accent hover:shadow-glow-accent transform hover:scale-105 transition-all duration-300"
               style={{ 
-                backgroundColor: page.design.accentColor,
+                backgroundColor: page.design?.accentColor || '#10B981',
                 color: "white"
               }}
             >
               <ApperIcon name="Gift" className="h-5 w-5 mr-2" />
-              {page.ctaText || "Claim Your Bonus Now"}
+              {page.cta_text || "Claim Your Bonus Now"}
             </Button>
             
             <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
@@ -197,31 +359,34 @@ const BonusPageView = () => {
               <span>Secure checkout • 30-day money-back guarantee</span>
             </div>
           </motion.div>
-
-          <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-            <div className="text-center space-y-3">
-              <h4 className="font-semibold text-white">How It Works</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-sm font-bold text-primary">1</span>
+{/* How It Works Section */}
+<Card className="bg-white/5 backdrop-blur-sm border-white/10 max-w-4xl mx-auto">
+            <div className="text-center space-y-6">
+              <h4 className="text-xl font-semibold text-white">How It Works</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-lg font-bold text-white">1</span>
                   </div>
+                  <h5 className="font-medium text-white">Purchase</h5>
                   <p className="text-sm text-gray-300">
                     Click the button above to purchase the main product
                   </p>
                 </div>
-                <div className="space-y-2">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-sm font-bold text-primary">2</span>
+                <div className="space-y-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-lg font-bold text-white">2</span>
                   </div>
+                  <h5 className="font-medium text-white">Complete</h5>
                   <p className="text-sm text-gray-300">
                     Complete your purchase on the secure checkout page
                   </p>
                 </div>
-                <div className="space-y-2">
-                  <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center mx-auto">
-                    <span className="text-sm font-bold text-primary">3</span>
+                <div className="space-y-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center mx-auto">
+                    <span className="text-lg font-bold text-white">3</span>
                   </div>
+                  <h5 className="font-medium text-white">Receive</h5>
                   <p className="text-sm text-gray-300">
                     Receive your exclusive bonus within 24 hours
                   </p>
