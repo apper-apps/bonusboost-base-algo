@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/atoms/Button";
-import Card from "@/components/atoms/Card";
+import ApperIcon from "@/components/ApperIcon";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
 import DashboardStats from "@/components/organisms/DashboardStats";
 import RecentActivity from "@/components/organisms/RecentActivity";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import ApperIcon from "@/components/ApperIcon";
+import Analytics from "@/components/pages/Analytics";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
 import { dashboardService } from "@/services/api/dashboardService";
 
 const Dashboard = () => {
@@ -60,10 +61,10 @@ const Dashboard = () => {
           <p className="text-gray-400 mt-2">
             Welcome back! Here's what's happening with your bonuses.
           </p>
-        </div>
+</div>
         
         <Button
-          onClick={() => navigate("/create")}
+          onClick={() => navigate("/create-bonus")}
           variant="accent"
           className="px-6 py-3"
         >
@@ -95,9 +96,9 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="space-y-3">
+<div className="space-y-3">
               <Button
-                onClick={() => navigate("/create")}
+                onClick={() => navigate("/create-bonus")}
                 variant="outline"
                 className="w-full justify-start"
               >
@@ -163,10 +164,9 @@ const Dashboard = () => {
                   Create your first AI-powered bonus in minutes
                 </p>
               </div>
-            </div>
-            
+</div>
             <Button
-              onClick={() => navigate("/create")}
+              onClick={() => navigate("/create-bonus")}
               variant="primary"
               className="px-6 py-3"
             >
