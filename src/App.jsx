@@ -7,6 +7,7 @@ import MyPages from "@/components/pages/MyPages";
 import Analytics from "@/components/pages/Analytics";
 import Settings from "@/components/pages/Settings";
 import BonusPageView from "@/components/pages/BonusPageView";
+import LandingPage from "@/components/pages/LandingPage";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="/bonus/:id" element={<BonusPageView />} />
+        <Route path="/landing" element={<LandingPage />} />
       </Routes>
     </div>
   );
