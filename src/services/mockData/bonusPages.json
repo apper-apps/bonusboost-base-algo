@@ -1,0 +1,62 @@
+[
+  {
+    "Id": 1,
+    "id": "page_1705312800000",
+    "bonusId": 1,
+    "title": "Get the P.E.A Profit Multiplier Toolkit",
+    "description": "Transform your affiliate marketing with these powerful automation templates that boost results by 300%",
+    "url": "https://bonusboost.com/bonus/pea-profit-multiplier",
+    "affiliateLink": "https://epcfire.com/automated-commission-system-wplus-new-jvz-dual-offer/?ref=affiliate123",
+    "ctaText": "Claim Your Bonus Now",
+    "status": "active",
+    "views": 247,
+    "clicks": 34,
+    "conversions": 7,
+    "design": {
+      "backgroundColor": "#111827",
+      "primaryColor": "#6366F1",
+      "accentColor": "#10B981"
+    },
+    "createdAt": "2024-01-15T12:00:00Z"
+  },
+  {
+    "Id": 2,
+    "id": "page_1705316400000",
+    "bonusId": 2,
+    "title": "5-Day Affiliate Cash Machine Course",
+    "description": "Exclusive video training that turns any commission system into a 24/7 profit machine",
+    "url": "https://bonusboost.com/bonus/cash-machine-course",
+    "affiliateLink": "https://epcfire.com/automated-commission-system-wplus-new-jvz-dual-offer/?ref=affiliate123",
+    "ctaText": "Get Instant Access",
+    "status": "active",
+    "views": 189,
+    "clicks": 28,
+    "conversions": 5,
+    "design": {
+      "backgroundColor": "#111827",
+      "primaryColor": "#8B5CF6",
+      "accentColor": "#F59E0B"
+    },
+    "createdAt": "2024-01-15T13:00:00Z"
+  },
+  {
+    "Id": 3,
+    "id": "page_1705320000000",
+    "bonusId": 3,
+    "title": "Social Media Domination Pack",
+    "description": "Ready-to-use social media templates that drive massive traffic to your affiliate offers",
+    "url": "https://bonusboost.com/bonus/social-media-pack",
+    "affiliateLink": "https://epcfire.com/automated-commission-system-wplus-new-jvz-dual-offer/?ref=affiliate123",
+    "ctaText": "Download Templates",
+    "status": "active",
+    "views": 156,
+    "clicks": 22,
+    "conversions": 4,
+    "design": {
+      "backgroundColor": "#111827",
+      "primaryColor": "#EF4444",
+      "accentColor": "#10B981"
+    },
+    "createdAt": "2024-01-15T14:00:00Z"
+  }
+]

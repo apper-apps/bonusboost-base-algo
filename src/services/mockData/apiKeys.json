@@ -1,0 +1,14 @@
+[
+  {
+    "provider": "openai",
+    "key": "sk-1234567890abcdef1234567890abcdef1234567890abcdef",
+    "isActive": true,
+    "addedAt": "2024-01-15T09:00:00Z"
+  },
+  {
+    "provider": "claude",
+    "key": "claude-3-sonnet-20240229-1234567890abcdef",
+    "isActive": true,
+    "addedAt": "2024-01-15T09:30:00Z"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "url": "https://epcfire.com/automated-commission-system-wplus-new-jvz-dual-offer/",
+    "name": "Automated Commission System",
+    "description": "A comprehensive affiliate marketing system that automates commission generation through the P.E.A Blueprint methodology.",
+    "features": [
+      "P.E.A Blueprint methodology",
+      "Automated commission tracking",
+      "Email marketing integration",
+      "Landing page templates",
+      "Analytics dashboard"
+    ],
+    "gaps": [
+      "No pre-built email sequences",
+      "Limited bonus creation tools",
+      "No social media templates",
+      "Missing conversion optimization guides",
+      "No advanced funnel templates"
+    ],
+    "analyzedAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "url": "https://example.com/affiliate-mastery-course",
+    "name": "Affiliate Mastery Course",
+    "description": "Complete training program for affiliate marketers to build sustainable income streams.",
+    "features": [
+      "Video training modules",
+      "Case studies",
+      "Traffic generation strategies",
+      "Conversion optimization",
+      "Community access"
+    ],
+    "gaps": [
+      "No automation tools",
+      "Limited bonus materials",
+      "No done-for-you content",
+      "Missing funnel templates",
+      "No email sequences"
+    ],
+    "analyzedAt": "2024-01-14T14:20:00Z"
+  }
+]

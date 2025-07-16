@@ -1,0 +1,41 @@
+[
+  {
+    "Id": 1,
+    "productId": 1,
+    "title": "P.E.A Profit Multiplier Toolkit",
+    "description": "Pre-built automation templates that amplify your P.E.A Blueprint results by 300%",
+    "type": "Templates",
+    "content": {
+      "targetGap": "No pre-built email sequences",
+      "components": ["Email templates", "Landing pages", "Follow-up sequences"]
+    },
+    "value": "$297",
+    "createdAt": "2024-01-15T11:00:00Z"
+  },
+  {
+    "Id": 2,
+    "productId": 1,
+    "title": "5-Day Affiliate Cash Machine Course",
+    "description": "Exclusive video training that turns the commission system into a 24/7 profit machine",
+    "type": "Training",
+    "content": {
+      "targetGap": "Limited bonus creation tools",
+      "components": ["Video modules", "Workbooks", "Action plans"]
+    },
+    "value": "$497",
+    "createdAt": "2024-01-15T11:15:00Z"
+  },
+  {
+    "Id": 3,
+    "productId": 1,
+    "title": "Social Media Domination Pack",
+    "description": "Ready-to-use social media templates that drive massive traffic to your affiliate offers",
+    "type": "Templates",
+    "content": {
+      "targetGap": "No social media templates",
+      "components": ["Post templates", "Story templates", "Ad creatives"]
+    },
+    "value": "$197",
+    "createdAt": "2024-01-15T11:30:00Z"
+  }
+]
